@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoding>UTF-8</encoding>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <appender name="vmall" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>d:/vmalllog/vmall.log</File>    <!-- windows下日志目录  -->
+       <!-- <File>/apache-tomcat-8.5.43/logs/vmall.log</File>--> <!-- linux下日志目录  -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>d:/vmalllog/vmall.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!--<fileNamePattern>/apache-tomcat-8.5.43/logs/vmall.log.%d{yyyy-MM-dd}.gz</fileNamePattern>-->
+            <append>true</append>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>d:/vmalllog/error.log</File>
+        <!--<File>/apache-tomcat-8.5.43/logs/error.log</File>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--<fileNamePattern>/apache-tomcat-8.5.43/logs/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>-->
+            <fileNamePattern>d:/vmalllog/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <append>true</append>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+<!--additivity——子Logger 是否继承 父Logger 的 输出源（appender）的标志位。
+具体说，默认情况下子Logger会继承父Logger的appender，也就是说子Logger会在父Logger的appender里输出。
+若是additivity设为false，则子Logger只会在自己的appender里输出，而不会在父Logger的appender里输出。
+若是additivity设为true，则子Logger不止会在自己的appender里输出，还会在root的logger的appender里输出。
+可以理解为additivity设为false后，子Logger会覆盖掉root的logger
+https://blog.csdn.net/xing930408/article/details/79817505-->
+    <logger name="com.vmall" additivity="false" level="INFO" >
+        <appender-ref ref="vmall" />
+        <appender-ref ref="console"/>
+    </logger>
+
+
+
+    <!-- mybatis log 日志 -->
+
+    <logger name="com.vmall.dao" level="DEBUG"/>
+
+    <!--<logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" >-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+
+    <!--<logger name="java.sql.Connection" level="DEBUG">-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+    <!--<logger name="java.sql.Statement" level="DEBUG">-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+
+    <!--<logger name="java.sql.PreparedStatement" level="DEBUG">-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+
+
+    <root level="DEBUG">
+        <appender-ref ref="console"/>
+        <appender-ref ref="error"/>
+    </root>
+
+</configuration>
