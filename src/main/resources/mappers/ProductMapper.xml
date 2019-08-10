@@ -176,4 +176,41 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"/>
+    from vmall_product
+    order by id asc
+  </select>
+
+  <select id="selectByNameOrProductId" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List"/>
+    from vmall_product
+    <where>
+      <if test="productName != null">
+        or name like #{productName}
+      </if>
+      <if test="productId != null">
+        or id = #{productId}
+      </if>
+    </where>
+  </select>
+  <select id="selectByNameAndCategoryIds" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List"/>
+    from vmall_product
+    where status = 1
+    <if test="productName != null">
+      and name like #{productName}
+    </if>
+    <if test="categoryIds != null">
+      and categoryIds in
+      <foreach item="item" index="index" open="(" separator="," close=")" collection="categoryIds">
+        #{item}
+      </foreach>
+    </if>
+
+  </select>
 </mapper>

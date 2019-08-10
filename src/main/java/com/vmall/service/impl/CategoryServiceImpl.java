@@ -70,7 +70,7 @@ public class CategoryServiceImpl implements ICategoryService {
         return ServerResponse.createBySuccess(categoryList);
     }
 
-    public ServerResponse getChildrenDeepCategory(Integer categoryId) {
+    public ServerResponse<List<Integer>> getChildrenDeepCategory(Integer categoryId) {
         if (categoryId == null ) {
             return ServerResponse.createByErrorMessage("参数错误");
         }
@@ -85,7 +85,7 @@ public class CategoryServiceImpl implements ICategoryService {
         return ServerResponse.createBySuccess(categoryIdList);
     }
 
-    private Set<Category> deepCategory(Set<Category> categorySet,Integer categoryId) {
+    public Set<Category> deepCategory(Set<Category> categorySet,Integer categoryId) {
         Category category = categoryMapper.selectByPrimaryKey(categoryId);
         if (category != null) {
             categorySet.add(category);
